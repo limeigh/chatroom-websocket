@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>聊天</title>
+</head>
+<body>
+  <h1>websocket聊天</h1>
+  <textarea></textarea>
+  <button>发送</button>
+  <ul>
+    <li>消息2</li>
+    <li>消息1</li>
+  </ul>
+</body>
+</html>
+<script>
+  // 0.使用WebSocket协议与服务器建立连接
+  var ws = new window.WebSocket('ws://127.0.0.1:8080')
+  var oUl = document.querySelector('ul')
+  // ws.send('ok') // 不能直接发
+  ws.onopen = function () {
+    console.log('建立成功!')
+  }
+  ws.onmessage = function (e) {
+    console.log(e.data) // e.data是后端发给前端的数据
+    // 我们把数据添加到dom中
+    var oLi = document.createElement('li')
+    oLi.innerHTML = e.data
+    oUl.insertBefore(oLi, oUl.firstChild)
+  }
+  
+  // 1点击发送按钮，把消息发给服务器端
+  var oBtn = document.querySelector('button')
+  oBtn.onclick = function () {
+    var txt = document.querySelector('textarea')
+    ws.send(txt.value)
+  }
+</script>
+<script>
+  // //1.与服务器建立连接
+  // // 参数: 就相当是发ajax请求的请求地址
+  // // new WebSocket() 时，它内部会发请求与服务器建立连接
+  // var ws = new window.WebSocket('ws://127.0.0.1:8080')
+  // // onopen 是与服务器连接成功的事件
+  // // 只有当我们玮服务器连接成功之后才可以发消息给服务器
+  // ws.onopen = function (e) {
+  //   // 给服务器发消息
+  //   ws.send('消息')
+  // }
+  // // 当服务器每次给我们浏览器发消息，就会触发这个message事件
+  // ws.onmessage = function (e) {
+  //   // e.data 是服务器发给我们的消息
+  //   console.log(e.data)
+  // }
+</script>
